@@ -1,14 +1,26 @@
-package entity
+package repository
 
 import (
 	"fmt"
 	"github.com/TskFok/GinApi/app/model"
+	"github.com/TskFok/GinApi/app/tool"
 	"github.com/TskFok/GinApi/app/utils/database"
 )
 
 type TestEntity struct {
 	Title   string
 	Content string
+}
+
+func Paginator() {
+	//批量查询
+	db := database.GetClient()
+
+	ress := make([]TestEntity, 10)
+
+	db = db.Model(&model.Test{}).Where("id > ?", "2").Limit(10)
+	rrr, ppp := tool.Paginator(db, &ress)
+	fmt.Println(rrr, ppp)
 }
 
 func Select() {
