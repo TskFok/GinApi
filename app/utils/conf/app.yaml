@@ -5,3 +5,7 @@ redis:
 mysql:
   dsn: root:@tcp(127.0.0.1:3306)/gin_api?charset=utf8mb4&parseTime=True&loc=Local
   prefix: gin_
+
+app:
+  read_time_out: 2
+  write_time_out: 2

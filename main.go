@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/TskFok/GinApi/app/utils/conf"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -25,5 +28,17 @@ func main() {
 			"all": "hi",
 		})
 	})
-	router.Run(":8999")
+
+	readTimeOut := conf.GetConf("app.read_time_out")
+	writeTimeOut := conf.GetConf("app.write_time_out")
+
+	s := &http.Server{
+		Addr:           fmt.Sprintf(":%d", 8999),
+		Handler:        router,
+		ReadTimeout:    time.Duration(readTimeOut.(int)) * time.Second,
+		WriteTimeout:   time.Duration(writeTimeOut.(int)) * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+
+	s.ListenAndServe()
 }
