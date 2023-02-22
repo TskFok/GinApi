@@ -12,14 +12,14 @@ type TestEntity struct {
 	Content string
 }
 
-func Paginator() {
+func Paginate() {
 	//批量查询
 	db := database.GetClient()
 
 	ress := make([]TestEntity, 10)
 
 	db = db.Model(&model.Test{}).Where("id > ?", "2").Limit(10)
-	rrr, ppp := tool.Paginator(db, &ress)
+	rrr, ppp := tool.Paginate(db, &ress)
 	fmt.Println(rrr, ppp)
 }
 
