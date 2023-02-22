@@ -15,9 +15,9 @@ func Select() {
 	//批量查询
 	db := database.GetClient()
 
-	ress := make([]*TestEntity, 10)
+	ress := make([]TestEntity, 10)
 
-	db.Model(&model.Test{}).Limit(10).Find(&ress)
+	db.Model(&model.Test{}).Where("id > ?", "2").Limit(10).Find(&ress)
 
 	for _, v := range ress {
 		fmt.Println(v)
