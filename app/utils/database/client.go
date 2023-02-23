@@ -9,12 +9,10 @@ import (
 )
 
 func GetClient() *gorm.DB {
-	dsn := conf.GetConf("mysql.dsn")
-	prefix := conf.GetConf("mysql.prefix")
-	db, err := gorm.Open(mysql.Open(dsn.(string)), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(conf.MysqlDsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   prefix.(string), //前缀
-			SingularTable: true,            //复数表名
+			TablePrefix:   conf.MysqlPrefix, //前缀
+			SingularTable: true,             //复数表名
 		},
 	})
 

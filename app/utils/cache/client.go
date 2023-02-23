@@ -9,12 +9,9 @@ import (
 )
 
 func getClient() *redis.Client {
-	host := conf.GetConf("redis.host")
-	password := conf.GetConf("redis.password")
-
 	client := redis.NewClient(&redis.Options{
-		Addr:     host.(string),
-		Password: password.(string),
+		Addr:     conf.RedisHost,
+		Password: conf.RedisPassword,
 		DB:       10,
 	})
 
