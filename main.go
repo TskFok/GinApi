@@ -9,6 +9,8 @@ import (
 )
 
 func main() {
+	appMode := conf.GetConf("app.run_mode")
+	gin.SetMode(appMode.(string))
 	router := gin.Default()
 
 	router.POST("/post", func(c *gin.Context) {
@@ -31,9 +33,10 @@ func main() {
 
 	readTimeOut := conf.GetConf("app.read_time_out")
 	writeTimeOut := conf.GetConf("app.write_time_out")
+	httpPort := conf.GetConf("app.http_port")
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", 8999),
+		Addr:           fmt.Sprintf(":%d", httpPort),
 		Handler:        router,
 		ReadTimeout:    time.Duration(readTimeOut.(int)) * time.Second,
 		WriteTimeout:   time.Duration(writeTimeOut.(int)) * time.Second,
