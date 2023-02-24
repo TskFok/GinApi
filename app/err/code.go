@@ -1,7 +1,10 @@
 package err
 
 const (
-	SUCCESS        = 200
-	ERROR          = 500
-	INVALID_PARAMS = 400
+	SUCCESS       = 200
+	ERROR         = 500
+	RUNTIME_ERROR = 400
+
+	SECOND_PASSWORD_ERROR = 400001
+	USER_NAME_EXISTS      = 400002
 )

@@ -36,8 +36,7 @@ func InitRouter() *gin.Engine {
 	{
 		userApi := api.Group("/user")
 		{
-			userApi.GET("/list", user.List)
-			userApi.PUT("", user.Update)
+			userApi.POST("/register", user.Register)
 		}
 	}
 
