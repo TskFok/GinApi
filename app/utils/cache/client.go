@@ -7,18 +7,17 @@ import (
 	"time"
 )
 
-func getClient() *redis.Client {
-	client := redis.NewClient(&redis.Options{
+var client *redis.Client
+
+func init() {
+	client = redis.NewClient(&redis.Options{
 		Addr:     conf.RedisHost,
 		Password: conf.RedisPassword,
 		DB:       10,
 	})
-
-	return client
 }
 
 func Get(key string) string {
-	client := getClient()
 	ctx := context.Background()
 	result, err := client.Get(ctx, key).Result()
 
@@ -30,7 +29,6 @@ func Get(key string) string {
 }
 
 func Set(key string, value string) {
-	client := getClient()
 	ctx := context.Background()
 	err := client.Set(ctx, key, value, 0).Err()
 
@@ -40,7 +38,6 @@ func Set(key string, value string) {
 }
 
 func SetNx(key string, value string, limit int64) bool {
-	client := getClient()
 	ctx := context.Background()
 
 	limitTime := time.Duration(limit) * time.Second
