@@ -18,26 +18,24 @@ type User struct {
 }
 
 // HasOneByName 判断用户名是否已经存在
-func (user *User) HasOneByName(condition interface{}) bool {
-	u := &User{}
-
+func (user *User) HasOneByName(condition interface{}) (u User, exists bool) {
 	db := database.Db.Where(condition).First(&u)
 
 	if nil != db.Error {
-		return false
+		return u, false
 	}
 
-	return true
+	return u, true
 }
 
 // CreateUser 创建用户
-func (user *User) CreateUser(param interface{}) bool {
-	db := database.Db.Save(param)
+func (user *User) CreateUser(param *User) (uint32, bool) {
+	db := database.Db.Create(param)
 
 	if nil != db.Error {
 		fmt.Println(db.Error)
-		return false
+		return 0, false
 	}
 
-	return true
+	return param.Id, true
 }

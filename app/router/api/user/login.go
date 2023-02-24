@@ -3,14 +3,46 @@ package user
 import (
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
+	"github.com/TskFok/GinApi/app/tool"
 	"github.com/gin-gonic/gin"
 	"time"
 )
 
-func Login(ctx *gin.Context) {
-	//userName := ctx.PostForm("user_name")
-	//password := ctx.PostForm("password")
+func Info(ctx *gin.Context) {
+	if user, exists := ctx.Get("user"); exists {
+		ctx.JSON(err.SUCCESS, err.GetSuccess(user))
+		return
+	}
 
+	ctx.JSON(err.UNDEFINED_ERROR, err.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+}
+
+func Login(ctx *gin.Context) {
+	userName := ctx.PostForm("user_name")
+	password := ctx.PostForm("password")
+
+	userModel := &model.User{}
+
+	condition := make(map[string]interface{})
+	condition["user_name"] = userName
+
+	user, exists := userModel.HasOneByName(condition)
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, err.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+
+		return
+	}
+
+	if tool.Password(password, user.Salt) == user.Password {
+		data := make(map[string]interface{})
+		data["token"] = tool.JwtToken(user.Id)
+		ctx.JSON(err.SUCCESS, err.GetSuccess(data))
+
+		return
+	}
+
+	ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.PASSWORD_VALIDATE_ERROR))
 }
 
 func Register(ctx *gin.Context) {
@@ -18,14 +50,8 @@ func Register(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 	rePassword := ctx.PostForm("re_password")
 
-	emptyMap := make(map[string]interface{})
-
 	if password != rePassword {
-		ctx.JSON(err.SUCCESS, gin.H{
-			"code": err.SECOND_PASSWORD_ERROR,
-			"msg":  err.GetMsg(err.SECOND_PASSWORD_ERROR),
-			"data": emptyMap,
-		})
+		ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.PASSWORD_DIFF_ERROR))
 
 		return
 	}
@@ -35,42 +61,37 @@ func Register(ctx *gin.Context) {
 	condition := make(map[string]interface{})
 	condition["user_name"] = userName
 
-	user := userModel.HasOneByName(condition)
+	_, exists := userModel.HasOneByName(condition)
 
-	if user {
-		ctx.JSON(err.SUCCESS, gin.H{
-			"code": err.USER_NAME_EXISTS,
-			"msg":  err.GetMsg(err.USER_NAME_EXISTS),
-			"data": emptyMap,
-		})
+	if exists {
+		ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.USER_NAME_EXISTS_ERROR))
 
 		return
 	}
+
+	sale := tool.UUID()
+	encryptPassword := tool.Password(password, sale)
 
 	newUser := &model.User{
-		Nick:          "aaa",
+		Nick:          "",
 		UserName:      userName,
-		Password:      password,
-		Salt:          "aaa",
+		Password:      encryptPassword,
+		Salt:          sale,
 		LastLoginTime: time.Now(),
-		LoginIp:       "aaa",
+		LoginIp:       ctx.RemoteIP(),
 	}
 
-	res := userModel.CreateUser(newUser)
+	id, success := userModel.CreateUser(newUser)
 
-	if res {
-		ctx.JSON(err.SUCCESS, gin.H{
-			"code": err.SUCCESS,
-			"mgs":  err.GetMsg(err.SUCCESS),
-			"data": emptyMap,
-		})
+	if success {
+		token := tool.JwtToken(id)
+		successMap := make(map[string]interface{})
+		successMap["token"] = token
+
+		ctx.JSON(err.SUCCESS, err.GetSuccess(successMap))
 
 		return
 	}
 
-	ctx.JSON(err.RUNTIME_ERROR, gin.H{
-		"code": err.RUNTIME_ERROR,
-		"mgs":  err.GetMsg(err.RUNTIME_ERROR),
-		"data": emptyMap,
-	})
+	ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.USER_CREATE_ERROR))
 }

@@ -13,6 +13,7 @@ var (
 	AppWriteTimeOut int
 	AppRunMode      string
 	AppHttpPort     int
+	JwtSecret       string
 )
 
 func init() {
@@ -32,5 +33,6 @@ func init() {
 	AppWriteTimeOut = viper.Get("app.write_time_out").(int)
 	AppRunMode = viper.Get("app.run_mode").(string)
 	AppHttpPort = viper.Get("app.http_port").(int)
+	JwtSecret = viper.Get("jwt.secret").(string)
 
 }

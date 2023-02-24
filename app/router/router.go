@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/TskFok/GinApi/app/middleware"
 	"github.com/TskFok/GinApi/app/router/api/user"
 	"github.com/TskFok/GinApi/app/utils/conf"
 	"github.com/gin-gonic/gin"
@@ -36,7 +37,10 @@ func InitRouter() *gin.Engine {
 	{
 		userApi := api.Group("/user")
 		{
+			userApi.POST("/login", user.Login)
 			userApi.POST("/register", user.Register)
+			userApi.Use(middleware.Jwt())
+			userApi.GET("/info", user.Info)
 		}
 	}
 
