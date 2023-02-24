@@ -2,7 +2,6 @@ package cache
 
 import (
 	"context"
-	"fmt"
 	"github.com/TskFok/GinApi/app/utils/conf"
 	"github.com/redis/go-redis/v9"
 	"time"
@@ -24,7 +23,7 @@ func Get(key string) string {
 	result, err := client.Get(ctx, key).Result()
 
 	if nil != err {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	return result
@@ -36,7 +35,7 @@ func Set(key string, value string) {
 	err := client.Set(ctx, key, value, 0).Err()
 
 	if nil != err {
-		fmt.Println(err)
+		panic(err)
 	}
 }
 
@@ -49,7 +48,7 @@ func SetNx(key string, value string, limit int64) bool {
 	set, err := client.SetNX(ctx, key, value, limitTime).Result()
 
 	if nil != err {
-		fmt.Println(err)
+		panic(err)
 	}
 	return set
 }

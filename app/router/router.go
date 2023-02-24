@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/TskFok/GinApi/app/router/api/user"
 	"github.com/TskFok/GinApi/app/utils/conf"
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,14 @@ func InitRouter() *gin.Engine {
 			"all": "hi",
 		})
 	})
+
+	api := router.Group("/api")
+	{
+		userApi := api.Group("/user")
+		{
+			userApi.GET("/list", user.List)
+		}
+	}
 
 	return router
 }

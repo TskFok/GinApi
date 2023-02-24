@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 )
 
@@ -16,13 +15,13 @@ var (
 	AppHttpPort     int
 )
 
-func InitConf() {
+func init() {
 	viper.SetConfigType("yaml")
 	viper.SetConfigFile("app/utils/conf/app.yaml")
 	err := viper.ReadInConfig()
 
 	if nil != err {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	RedisHost = viper.Get("redis.host").(string)

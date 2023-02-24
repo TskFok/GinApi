@@ -1,9 +1,19 @@
 package model
 
-import "time"
+import (
+	"github.com/TskFok/GinApi/app/utils/database"
+	"gorm.io/gorm"
+	"time"
+)
 
 type BaseModel struct {
-	Id        uint32    `gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL"`
-	CreatedAt time.Time `gorm:"column:created_at;type:DATETIME;NOT NULL"`
-	UpdatedAt time.Time `gorm:"column:updated_at;type:DATETIME;NOT NULL"`
+	Id        uint32    `json:"id" gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL"`
+	CreatedAt time.Time `json:"created_at" gorm:"column:created_at;type:DATETIME;NOT NULL"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at;type:DATETIME;NOT NULL"`
+}
+
+var db *gorm.DB
+
+func init() {
+	db = database.Db
 }

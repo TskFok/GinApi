@@ -9,8 +9,6 @@ import (
 )
 
 func main() {
-	conf.InitConf()
-
 	handler := router.InitRouter()
 
 	s := &http.Server{
