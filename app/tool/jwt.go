@@ -41,10 +41,10 @@ func JwtToken(id uint32) string {
 }
 
 func TokenInfo(token string) (*Claims, error) {
-	tokens, error := jwt.ParseWithClaims(token, &Claims{}, secret())
+	tokens, jwtErr := jwt.ParseWithClaims(token, &Claims{}, secret())
 
-	if nil != error {
-		return nil, error
+	if nil != jwtErr {
+		return nil, jwtErr
 	}
 
 	if claims, ok := tokens.Claims.(*Claims); ok && tokens.Valid {

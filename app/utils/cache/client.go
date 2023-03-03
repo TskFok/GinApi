@@ -42,10 +42,10 @@ func Get(key string) string {
 func Set(key string, value string, ttl int) {
 	redisExpire := time.Duration(ttl)
 
-	time := redisExpire * time.Second
+	expireTime := redisExpire * time.Second
 
 	ctx := context.Background()
-	err := client.Set(ctx, key, value, time).Err()
+	err := client.Set(ctx, key, value, expireTime).Err()
 
 	if nil != err {
 		panic(err)
