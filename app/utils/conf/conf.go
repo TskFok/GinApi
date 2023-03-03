@@ -14,6 +14,7 @@ var (
 	AppRunMode      string
 	AppHttpPort     int
 	JwtSecret       string
+	JwtExpire       int
 )
 
 func init() {
@@ -34,5 +35,6 @@ func init() {
 	AppRunMode = viper.Get("app.run_mode").(string)
 	AppHttpPort = viper.Get("app.http_port").(int)
 	JwtSecret = viper.Get("jwt.secret").(string)
+	JwtExpire = viper.Get("jwt.expire").(int)
 
 }

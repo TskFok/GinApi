@@ -13,4 +13,5 @@ app:
   http_port: 8999
 
 jwt:
-  secret: Jw19f1KF2A11AcHf1e21MF
+  secret: Jw19f1KF2A11AcHf1e21MF #jwt的secret
+  expire: 3 #过期时间3小时

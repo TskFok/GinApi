@@ -22,7 +22,7 @@ func JwtToken(id uint32) string {
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer: "user_system",
 			//三小时超时
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Hour * time.Duration(1))),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(conf.JwtExpire) * time.Hour)),
 			//生效时间
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			//签发时间

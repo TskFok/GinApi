@@ -4,17 +4,20 @@ import (
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
 	"github.com/TskFok/GinApi/app/tool"
+	"github.com/TskFok/GinApi/app/utils/cache"
 	"github.com/gin-gonic/gin"
+	"strconv"
+	"strings"
 	"time"
 )
 
 func Info(ctx *gin.Context) {
 	if user, exists := ctx.Get("user"); exists {
-		ctx.JSON(err.SUCCESS, err.GetSuccess(user))
+		ctx.JSON(err.SUCCESS, tool.GetSuccess(user))
 		return
 	}
 
-	ctx.JSON(err.UNDEFINED_ERROR, err.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+	ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
 }
 
 func Login(ctx *gin.Context) {
@@ -29,20 +32,28 @@ func Login(ctx *gin.Context) {
 	user, exists := userModel.HasOneByName(condition)
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, err.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
 
 		return
 	}
 
 	if tool.Password(password, user.Salt) == user.Password {
 		data := make(map[string]interface{})
+		user.UpdateLastLoginInfo(ctx.RemoteIP())
+
+		builder := strings.Builder{}
+		builder.WriteString("user:info:")
+		builder.WriteString(strconv.FormatUint(uint64(user.Id), 10))
+		key := builder.String()
+
+		cache.Del(key)
 		data["token"] = tool.JwtToken(user.Id)
-		ctx.JSON(err.SUCCESS, err.GetSuccess(data))
+		ctx.JSON(err.SUCCESS, tool.GetSuccess(data))
 
 		return
 	}
 
-	ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.PASSWORD_VALIDATE_ERROR))
+	ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.PASSWORD_VALIDATE_ERROR))
 }
 
 func Register(ctx *gin.Context) {
@@ -51,7 +62,7 @@ func Register(ctx *gin.Context) {
 	rePassword := ctx.PostForm("re_password")
 
 	if password != rePassword {
-		ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.PASSWORD_DIFF_ERROR))
+		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.PASSWORD_DIFF_ERROR))
 
 		return
 	}
@@ -64,7 +75,7 @@ func Register(ctx *gin.Context) {
 	_, exists := userModel.HasOneByName(condition)
 
 	if exists {
-		ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.USER_NAME_EXISTS_ERROR))
+		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.USER_NAME_EXISTS_ERROR))
 
 		return
 	}
@@ -88,10 +99,10 @@ func Register(ctx *gin.Context) {
 		successMap := make(map[string]interface{})
 		successMap["token"] = token
 
-		ctx.JSON(err.SUCCESS, err.GetSuccess(successMap))
+		ctx.JSON(err.SUCCESS, tool.GetSuccess(successMap))
 
 		return
 	}
 
-	ctx.JSON(err.RUNTIME_ERROR, err.GetErrorInfo(err.USER_CREATE_ERROR))
+	ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.USER_CREATE_ERROR))
 }

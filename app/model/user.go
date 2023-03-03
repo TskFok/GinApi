@@ -18,7 +18,7 @@ type User struct {
 }
 
 // HasOneByName 判断用户名是否已经存在
-func (user *User) HasOneByName(condition interface{}) (u User, exists bool) {
+func (user *User) HasOneByName(condition interface{}) (u *User, exists bool) {
 	db := database.Db.Where(condition).First(&u)
 
 	if nil != db.Error {
@@ -38,4 +38,18 @@ func (user *User) CreateUser(param *User) (uint32, bool) {
 	}
 
 	return param.Id, true
+}
+
+func (user *User) UpdateLastLoginInfo(ip string) bool {
+	condition := make(map[string]interface{})
+	condition["last_login_time"] = time.Now()
+	condition["login_ip"] = ip
+
+	db := database.Db.Updates(condition)
+
+	if nil != db.Error {
+		return false
+	}
+
+	return true
 }

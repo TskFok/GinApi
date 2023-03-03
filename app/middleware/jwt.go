@@ -1,22 +1,26 @@
 package middleware
 
 import (
+	"encoding/json"
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
 	"github.com/TskFok/GinApi/app/tool"
+	"github.com/TskFok/GinApi/app/utils/cache"
 	"github.com/gin-gonic/gin"
+	"strconv"
+	"strings"
 )
 
 func Jwt() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
 
-		claims, error := tool.TokenInfo(token)
+		claims, tokenErr := tool.TokenInfo(token)
 
-		if nil != error {
+		if nil != tokenErr {
 			ctx.JSON(err.RUNTIME_ERROR, gin.H{
 				"code": err.RUNTIME_ERROR,
-				"msg":  error.Error(),
+				"msg":  tokenErr.Error(),
 				"data": make(map[string]interface{}),
 			})
 
@@ -24,14 +28,35 @@ func Jwt() gin.HandlerFunc {
 			return
 		}
 
-		userModel := &model.User{}
-		condition := make(map[string]interface{})
-		condition["id"] = claims.Uid
+		builder := strings.Builder{}
+		builder.WriteString("user:info:")
+		builder.WriteString(strconv.FormatUint(uint64(claims.Uid), 10))
+		key := builder.String()
 
-		user, exists := userModel.HasOneByName(condition)
+		user := &model.User{}
+		if cache.Has(key) {
+			jsonErr := json.Unmarshal([]byte(cache.Get(key)), &user)
 
-		if !exists {
-			ctx.JSON(err.UNDEFINED_ERROR, err.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+			if nil != jsonErr {
+				ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+			}
+		} else {
+			userModel := &model.User{}
+			condition := make(map[string]interface{})
+			condition["id"] = claims.Uid
+			var exists bool
+
+			user, exists = userModel.HasOneByName(condition)
+
+			if !exists {
+				ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+			}
+			res, jsonErr := json.Marshal(user)
+
+			if nil != jsonErr {
+				ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.REDIS_ERROR))
+			}
+			cache.Set(key, string(res), 3600)
 		}
 
 		ctx.Set("user", user)
