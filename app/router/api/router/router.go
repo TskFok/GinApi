@@ -18,6 +18,21 @@ func Create(ctx *gin.Context) {
 	newRouter.Description = description
 	newRouter.Type = routerType
 
+	userId, exists := ctx.Get("user_id")
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+	}
+	newRouter.CreatorId = userId.(uint32)
+
+	userName, exists := ctx.Get("user_name")
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+	}
+
+	newRouter.CreatorName = userName.(string)
+
 	id, routerErr := newRouter.Create(newRouter)
 
 	if routerErr != nil {

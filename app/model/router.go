@@ -9,6 +9,8 @@ type Router struct {
 	Router      string `gorm:"column:router;type:VARCHAR(255);NOT NULL"`
 	Description string `gorm:"column:description;type:VARCHAR(255);NOT NULL"`
 	Type        string `gorm:"column:type;type:VARCHAR(50);NOT NULL"`
+	CreatorId   uint32 `gorm:"column:creator_id;type:INT(11) UNSIGNED;NOT NULL"`
+	CreatorName string `gorm:"column:creator_name;type:VARCHAR(50);NOT NULL"`
 }
 
 func (router *Router) Create(newRouter *Router) (id uint32, err error) {

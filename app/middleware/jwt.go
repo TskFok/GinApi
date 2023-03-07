@@ -60,6 +60,8 @@ func Jwt() gin.HandlerFunc {
 		}
 
 		ctx.Set("user", user)
+		ctx.Set("user_name", user.UserName)
+		ctx.Set("user_id", user.Id)
 
 		ctx.Next()
 	}
