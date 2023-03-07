@@ -10,13 +10,13 @@ import (
 func Create(ctx *gin.Context) {
 	router := ctx.PostForm("router")
 	description := ctx.PostForm("description")
-	routerType := ctx.PostForm("type")
+	method := ctx.PostForm("method")
 
 	newRouter := &model.Router{}
 
 	newRouter.Router = router
 	newRouter.Description = description
-	newRouter.Type = routerType
+	newRouter.Method = method
 
 	userId, exists := ctx.Get("user_id")
 
@@ -42,4 +42,37 @@ func Create(ctx *gin.Context) {
 	}
 
 	ctx.JSON(err.SUCCESS, tool.GetSuccess(id))
+}
+
+func Update(ctx *gin.Context) {
+	id := ctx.PostForm("id")
+	router := ctx.PostForm("router")
+	description := ctx.PostForm("description")
+	method := ctx.PostForm("method")
+
+	routerModel := &model.Router{}
+	condition := make(map[string]interface{})
+	condition["id"] = id
+
+	routerDetail, exists := routerModel.Get(condition)
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.ROUTER_UNDEFINED_ERROR))
+
+		return
+	}
+
+	condition = make(map[string]interface{})
+	condition["router"] = router
+	condition["description"] = description
+	condition["method"] = method
+
+	isUpdate := routerDetail.Update(condition)
+
+	if !isUpdate {
+		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.ROUTE_UPDATE_ERROR))
+
+		return
+	}
+	ctx.JSON(err.SUCCESS, tool.GetSuccess("success"))
 }

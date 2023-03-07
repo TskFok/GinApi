@@ -29,7 +29,7 @@ func Login(ctx *gin.Context) {
 	condition := make(map[string]interface{})
 	condition["user_name"] = userName
 
-	user, exists := userModel.HasOneByName(condition)
+	user, exists := userModel.Get(condition)
 
 	if !exists {
 		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
@@ -39,7 +39,11 @@ func Login(ctx *gin.Context) {
 
 	if tool.Password(password, user.Salt) == user.Password {
 		data := make(map[string]interface{})
-		user.UpdateLastLoginInfo(ctx.RemoteIP())
+
+		condition = make(map[string]interface{})
+		condition["last_login_time"] = time.Now()
+		condition["login_ip"] = ctx.RemoteIP()
+		user.Update(condition)
 
 		builder := strings.Builder{}
 		builder.WriteString("user:info:")
@@ -72,7 +76,7 @@ func Register(ctx *gin.Context) {
 	condition := make(map[string]interface{})
 	condition["user_name"] = userName
 
-	_, exists := userModel.HasOneByName(condition)
+	_, exists := userModel.Get(condition)
 
 	if exists {
 		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.USER_NAME_EXISTS_ERROR))
@@ -92,7 +96,7 @@ func Register(ctx *gin.Context) {
 		LoginIp:       ctx.RemoteIP(),
 	}
 
-	id, success := userModel.CreateUser(newUser)
+	id, success := userModel.Create(newUser)
 
 	if success {
 		token := tool.JwtToken(id)

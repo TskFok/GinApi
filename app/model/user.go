@@ -17,8 +17,8 @@ type User struct {
 	LoginIp       string    `gorm:"column:login_ip;type:VARCHAR(255);NOT NULL" json:"login_ip,omitempty"`
 }
 
-// HasOneByName 判断用户名是否已经存在
-func (user *User) HasOneByName(condition interface{}) (u *User, exists bool) {
+// Get 获取用户信息
+func (*User) Get(condition interface{}) (u *User, exists bool) {
 	db := database.Db.Where(condition).First(&u)
 
 	if nil != db.Error {
@@ -28,8 +28,8 @@ func (user *User) HasOneByName(condition interface{}) (u *User, exists bool) {
 	return u, true
 }
 
-// CreateUser 创建用户
-func (user *User) CreateUser(param *User) (uint32, bool) {
+// Create 创建用户
+func (*User) Create(param *User) (uint32, bool) {
 	db := database.Db.Create(param)
 
 	if nil != db.Error {
@@ -40,12 +40,9 @@ func (user *User) CreateUser(param *User) (uint32, bool) {
 	return param.Id, true
 }
 
-func (user *User) UpdateLastLoginInfo(ip string) bool {
-	condition := make(map[string]interface{})
-	condition["last_login_time"] = time.Now()
-	condition["login_ip"] = ip
-
-	db := database.Db.Updates(condition)
+// Update 更新用户
+func (user *User) Update(condition interface{}) bool {
+	db := database.Db.Model(user).Updates(condition)
 
 	if nil != db.Error {
 		return false

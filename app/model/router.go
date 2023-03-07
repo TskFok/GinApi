@@ -1,6 +1,8 @@
 package model
 
-import "github.com/TskFok/GinApi/app/utils/database"
+import (
+	"github.com/TskFok/GinApi/app/utils/database"
+)
 
 type Router struct {
 	BaseModel
@@ -8,17 +10,40 @@ type Router struct {
 	Id          uint32 `gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL"`
 	Router      string `gorm:"column:router;type:VARCHAR(255);NOT NULL"`
 	Description string `gorm:"column:description;type:VARCHAR(255);NOT NULL"`
-	Type        string `gorm:"column:type;type:VARCHAR(50);NOT NULL"`
+	Method      string `gorm:"column:method;type:VARCHAR(50);NOT NULL"`
 	CreatorId   uint32 `gorm:"column:creator_id;type:INT(11) UNSIGNED;NOT NULL"`
 	CreatorName string `gorm:"column:creator_name;type:VARCHAR(50);NOT NULL"`
 }
 
-func (router *Router) Create(newRouter *Router) (id uint32, err error) {
-	db := database.Db.Create(&newRouter)
+// Create 创建路由
+func (*Router) Create(router *Router) (id uint32, err error) {
+	db := database.Db.Create(&router)
 
 	if db.Error != nil {
 		return 0, db.Error
 	}
 
-	return newRouter.Id, nil
+	return router.Id, nil
+}
+
+// Update 修改路由
+func (router *Router) Update(condition interface{}) bool {
+	db := database.Db.Model(router).Updates(condition)
+
+	if db.Error != nil {
+		return false
+	}
+
+	return true
+}
+
+// Get 获取路由信息
+func (*Router) Get(condition interface{}) (router *Router, exists bool) {
+	db := database.Db.Where(condition).First(&router)
+
+	if db.Error != nil {
+		return nil, false
+	}
+
+	return router, true
 }

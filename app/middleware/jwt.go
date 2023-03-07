@@ -46,7 +46,7 @@ func Jwt() gin.HandlerFunc {
 			condition["id"] = claims.Uid
 			var exists bool
 
-			user, exists = userModel.HasOneByName(condition)
+			user, exists = userModel.Get(condition)
 
 			if !exists {
 				ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))

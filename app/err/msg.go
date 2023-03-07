@@ -9,10 +9,12 @@ var MsgFlags = map[int]string{
 	USER_NAME_EXISTS_ERROR:  "用户名已存在",
 	UNKNWON_ERROR:           "未知错误",
 	USER_UNDEFINED_ERROR:    "用户不存在",
+	ROUTER_UNDEFINED_ERROR:  "路由不存在",
 	PASSWORD_VALIDATE_ERROR: "密码错误",
 	USER_CREATE_ERROR:       "用户创建失败",
 	REDIS_ERROR:             "redis错误",
 	ROUTE_CREATE_ERROR:      "router创建失败",
+	ROUTE_UPDATE_ERROR:      "router更新失败",
 }
 
 func GetMsg(code int) string {
