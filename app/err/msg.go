@@ -12,6 +12,7 @@ var MsgFlags = map[int]string{
 	PASSWORD_VALIDATE_ERROR: "密码错误",
 	USER_CREATE_ERROR:       "用户创建失败",
 	REDIS_ERROR:             "redis错误",
+	ROUTE_CREATE_ERROR:      "router创建失败",
 }
 
 func GetMsg(code int) string {
