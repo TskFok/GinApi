@@ -8,6 +8,7 @@ var MsgFlags = map[int]string{
 	PASSWORD_DIFF_ERROR:     "二次密码不相同",
 	USER_NAME_EXISTS_ERROR:  "用户名已存在",
 	UNKNWON_ERROR:           "未知错误",
+	PARAMS_UNDEFINED_ERROR:  "字段不存在",
 	USER_UNDEFINED_ERROR:    "用户不存在",
 	ROUTER_UNDEFINED_ERROR:  "路由不存在",
 	PASSWORD_VALIDATE_ERROR: "密码错误",

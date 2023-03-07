@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	BaseModel
+
 	Id            uint32    `gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL" json:"id,omitempty"`
 	Nick          string    `gorm:"column:nick;type:VARCHAR(50);NOT NULL" json:"nick,omitempty"`
 	UserName      string    `gorm:"column:user_name;type:VARCHAR(50);NOT NULL" json:"user_name,omitempty"`

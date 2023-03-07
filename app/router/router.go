@@ -27,6 +27,7 @@ func InitRouter() *gin.Engine {
 		routerApi := api.Group("/router")
 		{
 			routerApi.Use(middleware.Jwt())
+			routerApi.GET("", router.Get)
 			routerApi.POST("", router.Create)
 			routerApi.PUT("", router.Update)
 		}

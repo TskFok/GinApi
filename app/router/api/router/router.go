@@ -7,6 +7,27 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func Get(ctx *gin.Context) {
+	id, exists := ctx.GetQuery("id")
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.PARAMS_UNDEFINED_ERROR))
+	}
+	router := &model.Router{}
+
+	condition := make(map[string]interface{})
+	condition["id"] = id
+	routerDetail, exists := router.Get(condition)
+
+	if !exists {
+		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.ROUTER_UNDEFINED_ERROR))
+
+		return
+	}
+
+	ctx.JSON(err.SUCCESS, tool.GetSuccess(routerDetail))
+}
+
 func Create(ctx *gin.Context) {
 	router := ctx.PostForm("router")
 	description := ctx.PostForm("description")

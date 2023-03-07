@@ -7,12 +7,12 @@ import (
 type Router struct {
 	BaseModel
 
-	Id          uint32 `gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL"`
-	Router      string `gorm:"column:router;type:VARCHAR(255);NOT NULL"`
-	Description string `gorm:"column:description;type:VARCHAR(255);NOT NULL"`
-	Method      string `gorm:"column:method;type:VARCHAR(50);NOT NULL"`
-	CreatorId   uint32 `gorm:"column:creator_id;type:INT(11) UNSIGNED;NOT NULL"`
-	CreatorName string `gorm:"column:creator_name;type:VARCHAR(50);NOT NULL"`
+	Id          uint32 `gorm:"column:id;type:INT(11) UNSIGNED;AUTO_INCREMENT;NOT NULL" json:"id,omitempty"`
+	Router      string `gorm:"column:router;type:VARCHAR(255);NOT NULL" json:"router,omitempty"`
+	Description string `gorm:"column:description;type:VARCHAR(255);NOT NULL" json:"description,omitempty"`
+	Method      string `gorm:"column:method;type:VARCHAR(50);NOT NULL" json:"method,omitempty"`
+	CreatorId   uint32 `gorm:"column:creator_id;type:INT(11) UNSIGNED;NOT NULL" json:"creator_id,omitempty"`
+	CreatorName string `gorm:"column:creator_name;type:VARCHAR(50);NOT NULL" json:"creator_name,omitempty"`
 }
 
 // Create 创建路由
