@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/TskFok/GinApi/app/tool"
 	"github.com/TskFok/GinApi/app/utils/database"
 )
 
@@ -46,4 +47,14 @@ func (*Router) Get(condition interface{}) (router *Router, exists bool) {
 	}
 
 	return router, true
+}
+
+func (*Router) List(page int, size int) (res map[string]interface{}) {
+	db := database.Db.Offset(size * (page - 1)).Limit(size).Order("id desc")
+
+	routers := &[]Router{}
+
+	res = tool.Paginate(db, routers)
+
+	return
 }

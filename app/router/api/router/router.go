@@ -5,7 +5,23 @@ import (
 	"github.com/TskFok/GinApi/app/model"
 	"github.com/TskFok/GinApi/app/tool"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
+
+func List(ctx *gin.Context) {
+	page := ctx.DefaultQuery("page", "1")
+	size := ctx.DefaultQuery("size", "10")
+
+	router := &model.Router{}
+
+	pageInt, _ := strconv.Atoi(page)
+	sizeInt, _ := strconv.Atoi(size)
+
+	list := router.List(pageInt, sizeInt)
+
+	ctx.JSON(err.SUCCESS, tool.GetSuccess(list))
+
+}
 
 func Get(ctx *gin.Context) {
 	id, exists := ctx.GetQuery("id")
