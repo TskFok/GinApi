@@ -2,6 +2,7 @@ package tool
 
 import (
 	"github.com/TskFok/GinApi/app/err"
+	"github.com/TskFok/GinApi/app/utils/kafka"
 	"github.com/TskFok/GinApi/app/utils/logger"
 )
 
@@ -21,6 +22,7 @@ func GetErrorInfo(code int) map[string]interface{} {
 	errorInfo["data"] = make(map[string]interface{})
 
 	logger.Error(errorInfo["msg"])
+	kafka.Send(errorInfo["msg"].(string))
 
 	return errorInfo
 }
@@ -32,6 +34,7 @@ func RuntimeErrorInfo(msg string) map[string]interface{} {
 	errorInfo["data"] = make(map[string]interface{})
 
 	logger.Error(errorInfo["msg"])
+	kafka.Send(errorInfo["msg"].(string))
 
 	return errorInfo
 }

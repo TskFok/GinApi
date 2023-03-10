@@ -16,6 +16,8 @@ var (
 	JwtSecret       string
 	JwtExpire       int
 	LoggerFilePath  string
+	KafkaHost       string
+	KafkaTopic      string
 )
 
 func init() {
@@ -38,5 +40,7 @@ func init() {
 	JwtSecret = viper.Get("jwt.secret").(string)
 	JwtExpire = viper.Get("jwt.expire").(int)
 	LoggerFilePath = viper.Get("logger.file_path").(string)
+	KafkaHost = viper.Get("kafka.host").(string)
+	KafkaTopic = viper.Get("kafka.topic").(string)
 
 }

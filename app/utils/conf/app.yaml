@@ -18,3 +18,7 @@ jwt:
 
 logger:
   file_path: "app/runtime/"
+
+kafka:
+  host: 192.168.110.133:9092
+  topic: test
