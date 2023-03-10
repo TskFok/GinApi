@@ -16,6 +16,7 @@ var MsgFlags = map[int]string{
 	REDIS_ERROR:             "redis错误",
 	ROUTE_CREATE_ERROR:      "router创建失败",
 	ROUTE_UPDATE_ERROR:      "router更新失败",
+	TOKEN_ERROR:             "token获取失败",
 }
 
 func GetMsg(code int) string {

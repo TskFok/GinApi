@@ -9,11 +9,9 @@ import (
 )
 
 func main() {
-	handler := router.InitRouter()
-
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%d", conf.AppHttpPort),
-		Handler:        handler,
+		Handler:        router.Handle,
 		ReadTimeout:    time.Duration(conf.AppReadTimeOut) * time.Second,
 		WriteTimeout:   time.Duration(conf.AppWriteTimeOut) * time.Second,
 		MaxHeaderBytes: 1 << 20,

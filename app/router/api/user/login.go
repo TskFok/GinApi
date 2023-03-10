@@ -51,7 +51,13 @@ func Login(ctx *gin.Context) {
 		key := builder.String()
 
 		cache.Del(key)
-		data["token"] = tool.JwtToken(user.Id)
+		token, tokenErr := tool.JwtToken(user.Id)
+		data["token"] = token
+		if nil != tokenErr {
+			ctx.JSON(err.ERROR, tool.GetErrorInfo(err.TOKEN_ERROR))
+
+			return
+		}
 		ctx.JSON(err.SUCCESS, tool.GetSuccess(data))
 
 		return
@@ -99,7 +105,13 @@ func Register(ctx *gin.Context) {
 	id, success := userModel.Create(newUser)
 
 	if success {
-		token := tool.JwtToken(id)
+		token, tokenErr := tool.JwtToken(id)
+
+		if nil != tokenErr {
+			ctx.JSON(err.ERROR, tool.GetErrorInfo(err.TOKEN_ERROR))
+
+			return
+		}
 		successMap := make(map[string]interface{})
 		successMap["token"] = token
 

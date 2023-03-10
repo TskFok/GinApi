@@ -15,6 +15,7 @@ var (
 	AppHttpPort     int
 	JwtSecret       string
 	JwtExpire       int
+	LoggerFilePath  string
 )
 
 func init() {
@@ -36,5 +37,6 @@ func init() {
 	AppHttpPort = viper.Get("app.http_port").(int)
 	JwtSecret = viper.Get("jwt.secret").(string)
 	JwtExpire = viper.Get("jwt.expire").(int)
+	LoggerFilePath = viper.Get("logger.file_path").(string)
 
 }

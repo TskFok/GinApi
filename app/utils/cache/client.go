@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 	"github.com/TskFok/GinApi/app/utils/conf"
+	"github.com/TskFok/GinApi/app/utils/logger"
 	"github.com/redis/go-redis/v9"
 	"time"
 )
@@ -22,7 +23,8 @@ func Has(key string) bool {
 	result, err := client.Exists(ctx, key).Result()
 
 	if nil != err {
-		panic(err)
+		logger.Error(err.Error())
+		return false
 	}
 
 	return result > 0
@@ -33,7 +35,8 @@ func Get(key string) string {
 	result, err := client.Get(ctx, key).Result()
 
 	if nil != err {
-		panic(err)
+		logger.Error(err.Error())
+		return ""
 	}
 
 	return result
@@ -48,7 +51,7 @@ func Set(key string, value string, ttl int) {
 	err := client.Set(ctx, key, value, expireTime).Err()
 
 	if nil != err {
-		panic(err)
+		logger.Error(err.Error())
 	}
 }
 
@@ -60,7 +63,8 @@ func SetNx(key string, value string, limit int64) bool {
 	set, err := client.SetNX(ctx, key, value, limitTime).Result()
 
 	if nil != err {
-		panic(err)
+		logger.Error(err.Error())
+		return false
 	}
 	return set
 }
@@ -71,6 +75,7 @@ func Del(key string) bool {
 	err := client.Del(ctx, key).Err()
 
 	if nil != err {
+		logger.Error(err.Error())
 		return false
 	}
 

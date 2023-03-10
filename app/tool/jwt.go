@@ -13,7 +13,7 @@ type Claims struct {
 	jwt.RegisteredClaims `json:"jwt.RegisteredClaims"`
 }
 
-func JwtToken(id uint32) string {
+func JwtToken(id uint32) (string, error) {
 	secret := []byte(conf.JwtSecret)
 
 	newClaims := &Claims{
@@ -34,10 +34,10 @@ func JwtToken(id uint32) string {
 	token, err := t.SignedString(secret)
 
 	if nil != err {
-		panic(err)
+		return "", err
 	}
 
-	return token
+	return token, nil
 }
 
 func TokenInfo(token string) (*Claims, error) {

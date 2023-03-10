@@ -15,3 +15,6 @@ app:
 jwt:
   secret: Jw19f1KF2A11AcHf1e21MF #jwt的secret
   expire: 3 #过期时间3小时
+
+logger:
+  file_path: "app/runtime/"

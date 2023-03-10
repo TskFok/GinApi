@@ -1,8 +1,8 @@
 package model
 
 import (
-	"fmt"
 	"github.com/TskFok/GinApi/app/utils/database"
+	"github.com/TskFok/GinApi/app/utils/logger"
 	"time"
 )
 
@@ -23,6 +23,8 @@ func (*User) Get(condition interface{}) (u *User, exists bool) {
 	db := database.Db.Where(condition).First(&u)
 
 	if nil != db.Error {
+		logger.Error(db.Error.Error())
+
 		return u, false
 	}
 
@@ -34,7 +36,8 @@ func (*User) Create(param *User) (uint32, bool) {
 	db := database.Db.Create(param)
 
 	if nil != db.Error {
-		fmt.Println(db.Error)
+		logger.Error(db.Error.Error())
+
 		return 0, false
 	}
 
@@ -46,6 +49,8 @@ func (user *User) Update(condition interface{}) bool {
 	db := database.Db.Model(user).Updates(condition)
 
 	if nil != db.Error {
+		logger.Error(db.Error.Error())
+
 		return false
 	}
 

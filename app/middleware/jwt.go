@@ -18,11 +18,7 @@ func Jwt() gin.HandlerFunc {
 		claims, tokenErr := tool.TokenInfo(token)
 
 		if nil != tokenErr {
-			ctx.JSON(err.RUNTIME_ERROR, gin.H{
-				"code": err.RUNTIME_ERROR,
-				"msg":  tokenErr.Error(),
-				"data": make(map[string]interface{}),
-			})
+			ctx.JSON(err.RUNTIME_ERROR, tool.RuntimeErrorInfo(tokenErr.Error()))
 
 			ctx.Abort()
 			return

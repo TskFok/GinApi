@@ -8,14 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
-	newRouter := gin.New()
-	newRouter.Use(gin.Recovery())
-	newRouter.Use(gin.Logger())
+var Handle *gin.Engine
+
+func init() {
+	Handle = gin.New()
+	Handle.Use(gin.Recovery())
+	Handle.Use(gin.Logger())
 
 	gin.SetMode(conf.AppRunMode)
 
-	api := newRouter.Group("/api")
+	api := Handle.Group("/api")
 	{
 		userApi := api.Group("/user")
 		{
@@ -25,14 +27,13 @@ func InitRouter() *gin.Engine {
 			userApi.GET("/info", user.Info)
 		}
 		routerApi := api.Group("/router")
+
+		routerApi.Use(middleware.Jwt())
 		{
-			routerApi.Use(middleware.Jwt())
 			routerApi.GET("", router.List)
 			routerApi.GET("/detail", router.Get)
 			routerApi.POST("", router.Create)
 			routerApi.PUT("", router.Update)
 		}
 	}
-
-	return newRouter
 }

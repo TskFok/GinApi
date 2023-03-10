@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/TskFok/GinApi/app/tool"
 	"github.com/TskFok/GinApi/app/utils/database"
+	"github.com/TskFok/GinApi/app/utils/logger"
 )
 
 type Router struct {
@@ -21,6 +22,8 @@ func (*Router) Create(router *Router) (id uint32, err error) {
 	db := database.Db.Create(&router)
 
 	if db.Error != nil {
+		logger.Error(db.Error.Error())
+
 		return 0, db.Error
 	}
 
@@ -32,6 +35,8 @@ func (router *Router) Update(condition interface{}) bool {
 	db := database.Db.Model(router).Updates(condition)
 
 	if db.Error != nil {
+		logger.Error(db.Error.Error())
+
 		return false
 	}
 
@@ -43,6 +48,8 @@ func (*Router) Get(condition interface{}) (router *Router, exists bool) {
 	db := database.Db.Where(condition).First(&router)
 
 	if db.Error != nil {
+		logger.Error(db.Error.Error())
+
 		return nil, false
 	}
 
