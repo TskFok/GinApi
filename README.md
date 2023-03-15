@@ -1,8 +1,30 @@
 # GinApi
 
 ``````
+bootstrap:
+引导
+
+cmd:
+main文件
+
+command:
+命令行
+
+controller:
+控制器
+
 router:
-app/router/router.go
+路由
+
+runtime:
+运行时产生文件
+
+server:
+服务
+
+utils:
+第三方服务
+
 ``````
 
 ``````
@@ -25,16 +47,16 @@ app/err/msg.go
 配置文件:
 app/utils/conf/app.yaml
 
-获取配置内容:
-app/utils/conf/conf.go
+初始化配置内容:
+app/utils/conf/init.go
 ``````
 
 ``````
 数据库:
-database.Db.Where(condition).First(&u)
+global.MysqlClient.Where(condition).First(&u)
 
 缓存:
-cache.Set(key, string(res), 3600)
+global.RedisClient.Set(key, string(res), 3600)
 ``````
 
 ``````

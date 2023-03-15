@@ -1,9 +1,9 @@
 package model
 
 import (
+	"github.com/TskFok/GinApi/app/global"
 	"github.com/TskFok/GinApi/app/tool"
-	"github.com/TskFok/GinApi/app/utils/database"
-	"github.com/TskFok/GinApi/app/utils/logger"
+	"github.com/TskFok/GinApi/utils/logger"
 )
 
 type Router struct {
@@ -19,7 +19,7 @@ type Router struct {
 
 // Create 创建路由
 func (*Router) Create(router *Router) (id uint32, err error) {
-	db := database.Db.Create(&router)
+	db := global.MysqlClient.Create(&router)
 
 	if db.Error != nil {
 		logger.Error(db.Error.Error())
@@ -32,7 +32,7 @@ func (*Router) Create(router *Router) (id uint32, err error) {
 
 // Update 修改路由
 func (router *Router) Update(condition interface{}) bool {
-	db := database.Db.Model(router).Updates(condition)
+	db := global.MysqlClient.Model(router).Updates(condition)
 
 	if db.Error != nil {
 		logger.Error(db.Error.Error())
@@ -45,7 +45,7 @@ func (router *Router) Update(condition interface{}) bool {
 
 // Get 获取路由信息
 func (*Router) Get(condition interface{}) (router *Router, exists bool) {
-	db := database.Db.Where(condition).First(&router)
+	db := global.MysqlClient.Where(condition).First(&router)
 
 	if db.Error != nil {
 		logger.Error(db.Error.Error())
@@ -57,7 +57,7 @@ func (*Router) Get(condition interface{}) (router *Router, exists bool) {
 }
 
 func (*Router) List(page int, size int) (res map[string]interface{}) {
-	db := database.Db.Offset(size * (page - 1)).Limit(size).Order("id desc")
+	db := global.MysqlClient.Offset(size * (page - 1)).Limit(size).Order("id desc")
 
 	routers := &[]Router{}
 

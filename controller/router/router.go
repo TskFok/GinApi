@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
-	"github.com/TskFok/GinApi/app/tool"
+	"github.com/TskFok/GinApi/app/response"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -19,7 +19,7 @@ func List(ctx *gin.Context) {
 
 	list := router.List(pageInt, sizeInt)
 
-	ctx.JSON(err.SUCCESS, tool.GetSuccess(list))
+	response.Success(ctx, list)
 
 }
 
@@ -27,7 +27,9 @@ func Get(ctx *gin.Context) {
 	id, exists := ctx.GetQuery("id")
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.PARAMS_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.PARAMS_UNDEFINED_ERROR)
+
+		return
 	}
 	router := &model.Router{}
 
@@ -36,12 +38,12 @@ func Get(ctx *gin.Context) {
 	routerDetail, exists := router.Get(condition)
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.ROUTER_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.ROUTER_UNDEFINED_ERROR)
 
 		return
 	}
 
-	ctx.JSON(err.SUCCESS, tool.GetSuccess(routerDetail))
+	response.Success(ctx, routerDetail)
 }
 
 func Create(ctx *gin.Context) {
@@ -58,14 +60,18 @@ func Create(ctx *gin.Context) {
 	userId, exists := ctx.Get("user_id")
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+
+		return
 	}
 	newRouter.CreatorId = userId.(uint32)
 
 	userName, exists := ctx.Get("user_name")
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+
+		return
 	}
 
 	newRouter.CreatorName = userName.(string)
@@ -73,12 +79,12 @@ func Create(ctx *gin.Context) {
 	id, routerErr := newRouter.Create(newRouter)
 
 	if routerErr != nil {
-		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.ROUTE_CREATE_ERROR))
+		response.Error(ctx, err.RUNTIME_ERROR, err.ROUTE_CREATE_ERROR)
 
 		return
 	}
 
-	ctx.JSON(err.SUCCESS, tool.GetSuccess(id))
+	response.Success(ctx, id)
 }
 
 func Update(ctx *gin.Context) {
@@ -94,7 +100,7 @@ func Update(ctx *gin.Context) {
 	routerDetail, exists := routerModel.Get(condition)
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.ROUTER_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.ROUTER_UNDEFINED_ERROR)
 
 		return
 	}
@@ -107,9 +113,10 @@ func Update(ctx *gin.Context) {
 	isUpdate := routerDetail.Update(condition)
 
 	if !isUpdate {
-		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.ROUTE_UPDATE_ERROR))
+		response.Error(ctx, err.RUNTIME_ERROR, err.ROUTE_UPDATE_ERROR)
 
 		return
 	}
-	ctx.JSON(err.SUCCESS, tool.GetSuccess("success"))
+
+	response.Success(ctx, "success")
 }

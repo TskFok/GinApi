@@ -17,8 +17,13 @@ jwt:
   expire: 3 #过期时间3小时
 
 logger:
-  file_path: "app/runtime/"
+  file_path: "runtime/"
 
 kafka:
   host: 192.168.110.133:9092
   topic: test
+
+elastic:
+  host: http://127.0.0.1:9200
+  username: elastic
+  password: m-Hfzi-m694VFrCKKhZY

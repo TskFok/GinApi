@@ -3,8 +3,9 @@ package user
 import (
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
+	"github.com/TskFok/GinApi/app/response"
 	"github.com/TskFok/GinApi/app/tool"
-	"github.com/TskFok/GinApi/app/utils/cache"
+	"github.com/TskFok/GinApi/utils/cache"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"strings"
@@ -13,11 +14,12 @@ import (
 
 func Info(ctx *gin.Context) {
 	if user, exists := ctx.Get("user"); exists {
-		ctx.JSON(err.SUCCESS, tool.GetSuccess(user))
+		response.Success(ctx, user)
+
 		return
 	}
 
-	ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+	response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
 }
 
 func Login(ctx *gin.Context) {
@@ -32,7 +34,7 @@ func Login(ctx *gin.Context) {
 	user, exists := userModel.Get(condition)
 
 	if !exists {
-		ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
 
 		return
 	}
@@ -54,16 +56,17 @@ func Login(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(user.Id)
 		data["token"] = token
 		if nil != tokenErr {
-			ctx.JSON(err.ERROR, tool.GetErrorInfo(err.TOKEN_ERROR))
+			response.Error(ctx, err.ERROR, err.TOKEN_ERROR)
 
 			return
 		}
-		ctx.JSON(err.SUCCESS, tool.GetSuccess(data))
+
+		response.Success(ctx, data)
 
 		return
 	}
 
-	ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.PASSWORD_VALIDATE_ERROR))
+	response.Error(ctx, err.RUNTIME_ERROR, err.PASSWORD_VALIDATE_ERROR)
 }
 
 func Register(ctx *gin.Context) {
@@ -72,7 +75,7 @@ func Register(ctx *gin.Context) {
 	rePassword := ctx.PostForm("re_password")
 
 	if password != rePassword {
-		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.PASSWORD_DIFF_ERROR))
+		response.Error(ctx, err.RUNTIME_ERROR, err.PASSWORD_DIFF_ERROR)
 
 		return
 	}
@@ -85,7 +88,7 @@ func Register(ctx *gin.Context) {
 	_, exists := userModel.Get(condition)
 
 	if exists {
-		ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.USER_NAME_EXISTS_ERROR))
+		response.Error(ctx, err.RUNTIME_ERROR, err.USER_NAME_EXISTS_ERROR)
 
 		return
 	}
@@ -108,17 +111,17 @@ func Register(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(id)
 
 		if nil != tokenErr {
-			ctx.JSON(err.ERROR, tool.GetErrorInfo(err.TOKEN_ERROR))
+			response.Error(ctx, err.ERROR, err.TOKEN_ERROR)
 
 			return
 		}
 		successMap := make(map[string]interface{})
 		successMap["token"] = token
 
-		ctx.JSON(err.SUCCESS, tool.GetSuccess(successMap))
+		response.Success(ctx, successMap)
 
 		return
 	}
 
-	ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.USER_CREATE_ERROR))
+	response.Error(ctx, err.RUNTIME_ERROR, err.USER_CREATE_ERROR)
 }

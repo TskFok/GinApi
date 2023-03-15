@@ -1,7 +1,7 @@
 package tool
 
 import (
-	"github.com/TskFok/GinApi/app/utils/logger"
+	"github.com/TskFok/GinApi/utils/logger"
 	"gorm.io/gorm"
 )
 

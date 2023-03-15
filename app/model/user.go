@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/TskFok/GinApi/app/utils/database"
-	"github.com/TskFok/GinApi/app/utils/logger"
+	"github.com/TskFok/GinApi/app/global"
+	"github.com/TskFok/GinApi/utils/logger"
 	"time"
 )
 
@@ -20,7 +20,7 @@ type User struct {
 
 // Get 获取用户信息
 func (*User) Get(condition interface{}) (u *User, exists bool) {
-	db := database.Db.Where(condition).First(&u)
+	db := global.MysqlClient.Where(condition).First(&u)
 
 	if nil != db.Error {
 		logger.Error(db.Error.Error())
@@ -33,7 +33,7 @@ func (*User) Get(condition interface{}) (u *User, exists bool) {
 
 // Create 创建用户
 func (*User) Create(param *User) (uint32, bool) {
-	db := database.Db.Create(param)
+	db := global.MysqlClient.Create(param)
 
 	if nil != db.Error {
 		logger.Error(db.Error.Error())
@@ -46,7 +46,7 @@ func (*User) Create(param *User) (uint32, bool) {
 
 // Update 更新用户
 func (user *User) Update(condition interface{}) bool {
-	db := database.Db.Model(user).Updates(condition)
+	db := global.MysqlClient.Model(user).Updates(condition)
 
 	if nil != db.Error {
 		logger.Error(db.Error.Error())

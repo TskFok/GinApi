@@ -2,7 +2,7 @@ package tool
 
 import (
 	"errors"
-	"github.com/TskFok/GinApi/app/utils/conf"
+	"github.com/TskFok/GinApi/app/global"
 	"github.com/golang-jwt/jwt/v5"
 	"time"
 )
@@ -14,7 +14,7 @@ type Claims struct {
 }
 
 func JwtToken(id uint32) (string, error) {
-	secret := []byte(conf.JwtSecret)
+	secret := []byte(global.JwtSecret)
 
 	newClaims := &Claims{
 		Phone: "1881121211221",
@@ -22,7 +22,7 @@ func JwtToken(id uint32) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer: "user_system",
 			//三小时超时
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(conf.JwtExpire) * time.Hour)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(global.JwtExpire) * time.Hour)),
 			//生效时间
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			//签发时间
@@ -56,6 +56,6 @@ func TokenInfo(token string) (*Claims, error) {
 
 func secret() jwt.Keyfunc {
 	return func(token *jwt.Token) (interface{}, error) {
-		return []byte(conf.JwtSecret), nil
+		return []byte(global.JwtSecret), nil
 	}
 }

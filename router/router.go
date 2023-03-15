@@ -1,21 +1,21 @@
 package router
 
 import (
+	"github.com/TskFok/GinApi/app/global"
 	"github.com/TskFok/GinApi/app/middleware"
-	"github.com/TskFok/GinApi/app/router/api/router"
-	"github.com/TskFok/GinApi/app/router/api/user"
-	"github.com/TskFok/GinApi/app/utils/conf"
+	"github.com/TskFok/GinApi/controller/router"
+	"github.com/TskFok/GinApi/controller/user"
 	"github.com/gin-gonic/gin"
 )
 
 var Handle *gin.Engine
 
-func init() {
+func InitRouter() {
+	gin.SetMode(global.Env)
+
 	Handle = gin.New()
 	Handle.Use(gin.Recovery())
 	Handle.Use(gin.Logger())
-
-	gin.SetMode(conf.AppRunMode)
 
 	api := Handle.Group("/api")
 	{

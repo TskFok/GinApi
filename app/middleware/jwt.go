@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
+	"github.com/TskFok/GinApi/app/response"
 	"github.com/TskFok/GinApi/app/tool"
-	"github.com/TskFok/GinApi/app/utils/cache"
+	"github.com/TskFok/GinApi/utils/cache"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"strings"
@@ -18,7 +19,7 @@ func Jwt() gin.HandlerFunc {
 		claims, tokenErr := tool.TokenInfo(token)
 
 		if nil != tokenErr {
-			ctx.JSON(err.RUNTIME_ERROR, tool.RuntimeErrorInfo(tokenErr.Error()))
+			response.Error(ctx, err.RUNTIME_ERROR, tokenErr.Error())
 
 			ctx.Abort()
 			return
@@ -34,7 +35,10 @@ func Jwt() gin.HandlerFunc {
 			jsonErr := json.Unmarshal([]byte(cache.Get(key)), &user)
 
 			if nil != jsonErr {
-				ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+				response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+
+				ctx.Abort()
+				return
 			}
 		} else {
 			userModel := &model.User{}
@@ -45,12 +49,18 @@ func Jwt() gin.HandlerFunc {
 			user, exists = userModel.Get(condition)
 
 			if !exists {
-				ctx.JSON(err.UNDEFINED_ERROR, tool.GetErrorInfo(err.USER_UNDEFINED_ERROR))
+				response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+
+				ctx.Abort()
+				return
 			}
 			res, jsonErr := json.Marshal(user)
 
 			if nil != jsonErr {
-				ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.REDIS_ERROR))
+				response.Error(ctx, err.RUNTIME_ERROR, err.REDIS_ERROR)
+
+				ctx.Abort()
+				return
 			}
 			cache.Set(key, string(res), 3600)
 		}

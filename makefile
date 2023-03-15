@@ -19,3 +19,18 @@ build-mac: mac
 
 build-linux: linux
 	go build -o gin-run-linux main.go
+
+update:
+	go mody tidy
+
+run-debug:
+	go run cmd/api/main.go --env=debug
+
+run-release:
+	go run cmd/api/main.go --env=release
+
+server-kafka:
+	go run server/kafkaServer.go --env=release
+
+es-index:
+	go run elasticsearch/index.go --env=release
