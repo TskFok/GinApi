@@ -19,7 +19,7 @@ func Info(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+	response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 }
 
 func Login(ctx *gin.Context) {
@@ -34,7 +34,7 @@ func Login(ctx *gin.Context) {
 	user, exists := userModel.Get(condition)
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 
 		return
 	}
@@ -56,7 +56,7 @@ func Login(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(user.Id)
 		data["token"] = token
 		if nil != tokenErr {
-			response.Error(ctx, err.ERROR, err.TOKEN_ERROR)
+			response.Error(ctx, err.Error, err.TokenError)
 
 			return
 		}
@@ -66,7 +66,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.RUNTIME_ERROR, err.PASSWORD_VALIDATE_ERROR)
+	response.Error(ctx, err.RuntimeError, err.PasswordValidateError)
 }
 
 func Register(ctx *gin.Context) {
@@ -75,7 +75,7 @@ func Register(ctx *gin.Context) {
 	rePassword := ctx.PostForm("re_password")
 
 	if password != rePassword {
-		response.Error(ctx, err.RUNTIME_ERROR, err.PASSWORD_DIFF_ERROR)
+		response.Error(ctx, err.RuntimeError, err.PasswordDiffError)
 
 		return
 	}
@@ -88,7 +88,7 @@ func Register(ctx *gin.Context) {
 	_, exists := userModel.Get(condition)
 
 	if exists {
-		response.Error(ctx, err.RUNTIME_ERROR, err.USER_NAME_EXISTS_ERROR)
+		response.Error(ctx, err.RuntimeError, err.UserNameExistsError)
 
 		return
 	}
@@ -111,7 +111,7 @@ func Register(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(id)
 
 		if nil != tokenErr {
-			response.Error(ctx, err.ERROR, err.TOKEN_ERROR)
+			response.Error(ctx, err.Error, err.TokenError)
 
 			return
 		}
@@ -123,5 +123,5 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.RUNTIME_ERROR, err.USER_CREATE_ERROR)
+	response.Error(ctx, err.RuntimeError, err.UserCreateError)
 }

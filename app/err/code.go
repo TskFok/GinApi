@@ -2,22 +2,22 @@ package err
 
 const (
 	SUCCESS = 200
-	ERROR   = 500
+	Error   = 500
 
-	RUNTIME_ERROR           = 400
-	UNKNWON_ERROR           = 400000
-	PASSWORD_VALIDATE_ERROR = 400001
-	PASSWORD_DIFF_ERROR     = 400002
-	USER_NAME_EXISTS_ERROR  = 400003
-	USER_CREATE_ERROR       = 400004
-	REDIS_ERROR             = 400005
-	ROUTE_CREATE_ERROR      = 400006
-	ROUTE_UPDATE_ERROR      = 400007
+	RuntimeError          = 400
+	UnknownError          = 400000
+	PasswordValidateError = 400001
+	PasswordDiffError     = 400002
+	UserNameExistsError   = 400003
+	UserCreateError       = 400004
+	RedisError            = 400005
+	RouteCreateError      = 400006
+	RouteUpdateError      = 400007
 
-	UNDEFINED_ERROR        = 404
-	PARAMS_UNDEFINED_ERROR = 404000
-	USER_UNDEFINED_ERROR   = 404001
-	ROUTER_UNDEFINED_ERROR = 404002
+	UndefinedError       = 404
+	ParamsUndefinedError = 404000
+	UserUndefinedError   = 404001
+	RouterUndefinedError = 404002
 
-	TOKEN_ERROR = 500000
+	TokenError = 500000
 )

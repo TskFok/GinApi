@@ -19,7 +19,7 @@ func Jwt() gin.HandlerFunc {
 		claims, tokenErr := tool.TokenInfo(token)
 
 		if nil != tokenErr {
-			response.Error(ctx, err.RUNTIME_ERROR, tokenErr.Error())
+			response.Error(ctx, err.RuntimeError, tokenErr.Error())
 
 			ctx.Abort()
 			return
@@ -35,7 +35,7 @@ func Jwt() gin.HandlerFunc {
 			jsonErr := json.Unmarshal([]byte(cache.Get(key)), &user)
 
 			if nil != jsonErr {
-				response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+				response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 
 				ctx.Abort()
 				return
@@ -49,7 +49,7 @@ func Jwt() gin.HandlerFunc {
 			user, exists = userModel.Get(condition)
 
 			if !exists {
-				response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+				response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 
 				ctx.Abort()
 				return
@@ -57,7 +57,7 @@ func Jwt() gin.HandlerFunc {
 			res, jsonErr := json.Marshal(user)
 
 			if nil != jsonErr {
-				response.Error(ctx, err.RUNTIME_ERROR, err.REDIS_ERROR)
+				response.Error(ctx, err.RuntimeError, err.RedisError)
 
 				ctx.Abort()
 				return

@@ -27,7 +27,7 @@ func Get(ctx *gin.Context) {
 	id, exists := ctx.GetQuery("id")
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.PARAMS_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.ParamsUndefinedError)
 
 		return
 	}
@@ -38,7 +38,7 @@ func Get(ctx *gin.Context) {
 	routerDetail, exists := router.Get(condition)
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.ROUTER_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.RouterUndefinedError)
 
 		return
 	}
@@ -60,7 +60,7 @@ func Create(ctx *gin.Context) {
 	userId, exists := ctx.Get("user_id")
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 
 		return
 	}
@@ -69,7 +69,7 @@ func Create(ctx *gin.Context) {
 	userName, exists := ctx.Get("user_name")
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.USER_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
 
 		return
 	}
@@ -79,7 +79,7 @@ func Create(ctx *gin.Context) {
 	id, routerErr := newRouter.Create(newRouter)
 
 	if routerErr != nil {
-		response.Error(ctx, err.RUNTIME_ERROR, err.ROUTE_CREATE_ERROR)
+		response.Error(ctx, err.RuntimeError, err.RouteCreateError)
 
 		return
 	}
@@ -100,7 +100,7 @@ func Update(ctx *gin.Context) {
 	routerDetail, exists := routerModel.Get(condition)
 
 	if !exists {
-		response.Error(ctx, err.UNDEFINED_ERROR, err.ROUTER_UNDEFINED_ERROR)
+		response.Error(ctx, err.UndefinedError, err.RouterUndefinedError)
 
 		return
 	}
@@ -113,7 +113,7 @@ func Update(ctx *gin.Context) {
 	isUpdate := routerDetail.Update(condition)
 
 	if !isUpdate {
-		response.Error(ctx, err.RUNTIME_ERROR, err.ROUTE_UPDATE_ERROR)
+		response.Error(ctx, err.RuntimeError, err.RouteUpdateError)
 
 		return
 	}

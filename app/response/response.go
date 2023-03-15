@@ -29,7 +29,7 @@ func Error(ctx *gin.Context, code int, info any) {
 		errorInfo["code"] = info.(int)
 		errorInfo["msg"] = err.GetMsg(info.(int))
 	case string:
-		errorInfo["code"] = err.RUNTIME_ERROR
+		errorInfo["code"] = err.RuntimeError
 		errorInfo["msg"] = info.(string)
 	}
 
