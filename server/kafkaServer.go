@@ -43,7 +43,11 @@ func main() {
 				switch string(msg.Key) {
 				case "log":
 					res := make(map[string]interface{})
-					json.Unmarshal([]byte(msg.Value), &res)
+					unJsonErr := json.Unmarshal(msg.Value, &res)
+
+					if nil != unJsonErr {
+						fmt.Println(unJsonErr.Error())
+					}
 
 					request := res["request"]
 					response := res["response"]
@@ -87,7 +91,11 @@ func main() {
 		}(pc)
 	}
 	wg.Wait()
-	consumer.Close()
+	kError := consumer.Close()
+
+	if nil != kError {
+		fmt.Println(kError.Error())
+	}
 }
 
 type ApiLogStruct struct {
