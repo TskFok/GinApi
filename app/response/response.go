@@ -11,13 +11,13 @@ import (
 
 func Success(ctx *gin.Context, list interface{}) {
 	successInfo := make(map[string]interface{})
-	successInfo["code"] = err.SUCCESS
-	successInfo["msg"] = err.GetMsg(err.SUCCESS)
+	successInfo["code"] = err.Success
+	successInfo["msg"] = err.GetMsg(err.Success)
 	successInfo["data"] = list
 
 	infoLog(ctx, successInfo)
 
-	ctx.JSON(err.SUCCESS, successInfo)
+	ctx.JSON(err.Success, successInfo)
 }
 
 func Error(ctx *gin.Context, code int, info any) {

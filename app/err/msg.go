@@ -1,7 +1,7 @@
 package err
 
 var MsgFlags = map[int]string{
-	SUCCESS:               "成功",
+	Success:               "成功",
 	Error:                 "系统错误",
 	RuntimeError:          "程序运行错误",
 	UndefinedError:        "信息不存在",

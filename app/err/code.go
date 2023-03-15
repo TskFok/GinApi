@@ -1,7 +1,7 @@
 package err
 
 const (
-	SUCCESS = 200
+	Success = 200
 	Error   = 500
 
 	RuntimeError          = 400
