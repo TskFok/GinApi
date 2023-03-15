@@ -4,6 +4,7 @@ import (
 	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/model"
 	"github.com/TskFok/GinApi/app/response"
+	"github.com/TskFok/GinApi/controller"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -24,6 +25,10 @@ func List(ctx *gin.Context) {
 }
 
 func Get(ctx *gin.Context) {
+	if !singleValidate(ctx) {
+		return
+	}
+
 	id, exists := ctx.GetQuery("id")
 
 	if !exists {
@@ -47,15 +52,24 @@ func Get(ctx *gin.Context) {
 }
 
 func Create(ctx *gin.Context) {
-	router := ctx.PostForm("router")
-	description := ctx.PostForm("description")
-	method := ctx.PostForm("method")
+	if !createValidate(ctx) {
+		return
+	}
 
 	newRouter := &model.Router{}
 
-	newRouter.Router = router
-	newRouter.Description = description
-	newRouter.Method = method
+	newRouter.Router = ctx.PostForm("router")
+	newRouter.Method = ctx.PostForm("method")
+
+	_, exists := newRouter.Get(newRouter)
+
+	if exists {
+		response.Error(ctx, err.UndefinedError, err.RouteHasExistsError)
+
+		return
+	}
+
+	newRouter.Description = ctx.PostForm("description")
 
 	userId, exists := ctx.Get("user_id")
 
@@ -88,29 +102,32 @@ func Create(ctx *gin.Context) {
 }
 
 func Update(ctx *gin.Context) {
-	id := ctx.PostForm("id")
-	router := ctx.PostForm("router")
-	description := ctx.PostForm("description")
-	method := ctx.PostForm("method")
+	if !updateValidate(ctx) {
+		return
+	}
+
+	intId := controller.GetId(ctx)
+
+	if exist(ctx, intId) {
+		return
+	}
 
 	routerModel := &model.Router{}
-	condition := make(map[string]interface{})
-	condition["id"] = id
+	routerModel.Id = uint32(intId)
 
-	routerDetail, exists := routerModel.Get(condition)
+	router, exists := routerModel.Get(routerModel)
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.RouterUndefinedError)
+		response.Error(ctx, err.UndefinedError, err.RouteNotExistsError)
 
 		return
 	}
 
-	condition = make(map[string]interface{})
-	condition["router"] = router
-	condition["description"] = description
-	condition["method"] = method
+	router.Description = ctx.PostForm("description")
+	router.Router = ctx.PostForm("router")
+	router.Method = ctx.PostForm("method")
 
-	isUpdate := routerDetail.Update(condition)
+	isUpdate := routerModel.Update(router)
 
 	if !isUpdate {
 		response.Error(ctx, err.RuntimeError, err.RouteUpdateError)

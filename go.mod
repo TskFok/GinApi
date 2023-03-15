@@ -36,6 +36,9 @@ require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/gookit/filter v1.1.4 // indirect
+	github.com/gookit/goutil v0.6.7 // indirect
+	github.com/gookit/validate v1.4.6 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect

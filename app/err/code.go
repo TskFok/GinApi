@@ -13,6 +13,10 @@ const (
 	RedisError            = 400005
 	RouteCreateError      = 400006
 	RouteUpdateError      = 400007
+	ParamsValidateError   = 400008
+	RouteHasExistsError   = 400009
+	RouteNotExistsError   = 400010
+	RouteRepeatError      = 400011
 
 	UndefinedError       = 404
 	ParamsUndefinedError = 404000

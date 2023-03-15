@@ -23,6 +23,10 @@ func Info(ctx *gin.Context) {
 }
 
 func Login(ctx *gin.Context) {
+	if !loginValidate(ctx) {
+		return
+	}
+
 	userName := ctx.PostForm("user_name")
 	password := ctx.PostForm("password")
 
@@ -70,6 +74,10 @@ func Login(ctx *gin.Context) {
 }
 
 func Register(ctx *gin.Context) {
+	if !registerValidate(ctx) {
+		return
+	}
+
 	userName := ctx.PostForm("user_name")
 	password := ctx.PostForm("password")
 	rePassword := ctx.PostForm("re_password")
