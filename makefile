@@ -39,7 +39,7 @@ build-server-kafka-linux: linux
 	go build -o gin-kafka-run-linux -ldflags "-w -s"  -trimpath ./server/kafkaServer.go
 
 es-index:
-	go run elasticsearch/index.go --env=release
+	go run bin/cli/main.go es:index --env=debug
 
 build-cli-mac: mac
 	go build -o gin-cli-run-mac -ldflags "-w -s"  -trimpath ./bin/cli/main.go
