@@ -15,19 +15,19 @@ linux:
 	go mod  tidy
 
 build-mac: mac
-	go build -o gin-run-mac -ldflags "-w -s"  -trimpath ./cmd/api/main.go
+	go build -o gin-run-mac -ldflags "-w -s"  -trimpath ./bin/api/main.go
 
 build-linux: linux
-	go build -o gin-run-linux -ldflags "-w -s"  -trimpath cmd/api/main.go
+	go build -o gin-run-linux -ldflags "-w -s"  -trimpath ./bin/api/main.go
 
 update:
 	go mody tidy
 
 run-debug:
-	go run cmd/api/main.go --env=debug
+	go run bin/api/main.go --env=debug
 
 run-release:
-	go run cmd/api/main.go --env=release
+	go run bin/api/main.go --env=release
 
 server-kafka:
 	go run server/kafkaServer.go --env=release
@@ -40,3 +40,9 @@ build-server-kafka-linux: linux
 
 es-index:
 	go run elasticsearch/index.go --env=release
+
+build-cli-mac: mac
+	go build -o gin-cli-run-mac -ldflags "-w -s"  -trimpath ./bin/cli/main.go
+
+build-cli-linux: linux
+	go build -o gin-cli-run-linux -ldflags "-w -s"  -trimpath ./bin/cli/main.go
