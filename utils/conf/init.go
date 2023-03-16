@@ -29,21 +29,28 @@ func InitConfig() {
 	}
 
 	runtimePath := viper.Get("logger.file_path").(string)
-	afterAppend := append([]byte(dir), "/"...)
-	afterAppend = append(afterAppend, runtimePath...)
-	runtimePath = string(afterAppend)
+	global.LoggerFilePath = runtimePath
 
 	_, fErr := os.Stat(runtimePath)
 
+	//当前是否存在runtime目录,不存在会在系统用户目录中生成runtime目录
 	if nil != fErr {
-		mErr := os.Mkdir(runtimePath, 0755)
+		afterAppend := append([]byte(dir), "/"...)
+		afterAppend = append(afterAppend, runtimePath...)
+		runtimePath = string(afterAppend)
 
-		if nil != mErr {
-			panic(mErr.Error())
+		_, fiErr := os.Stat(runtimePath)
+
+		if nil != fiErr {
+			mErr := os.Mkdir(runtimePath, 0755)
+
+			if nil != mErr {
+				panic(mErr.Error())
+			}
 		}
-	}
 
-	global.LoggerFilePath = runtimePath
+		global.LoggerFilePath = runtimePath
+	}
 
 	global.RedisHost = viper.Get("redis.host").(string)
 	global.RedisPassword = viper.Get("redis.password").(string)

@@ -17,7 +17,7 @@ router:
 路由
 
 runtime:
-运行时产生文件
+运行时产生的文件，当前目录下没有runtime目录时，自动在用户的系统目录下生成
 
 server:
 服务
@@ -29,10 +29,10 @@ utils:
 
 ``````
 正确返回:
-ctx.JSON(err.SUCCESS, tool.GetSuccess(something))
+response.Success()
 
 错误返回:
-ctx.JSON(err.RUNTIME_ERROR, tool.GetErrorInfo(err.ROUTE_CREATE_ERROR))
+response.Error()
 ``````
 
 ``````
@@ -45,10 +45,10 @@ app/err/msg.go
 
 ``````
 配置文件:
-app/utils/conf/app.yaml
+utils/conf/conf.yaml
 
 初始化配置内容:
-app/utils/conf/init.go
+utils/conf/init.go
 ``````
 
 ``````
