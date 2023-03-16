@@ -1,22 +1,49 @@
 package conf
 
 import (
+	"bytes"
+	_ "embed"
 	"github.com/TskFok/GinApi/app/global"
 	"github.com/spf13/viper"
 	"os"
 	"strings"
 )
 
+//go:embed conf.yaml
+var conf []byte
+
 func InitConfig() {
 	global.Env = strings.Replace(os.Args[1], "--env=", "", 1)
-
 	viper.SetConfigType("yaml")
-	viper.SetConfigFile("config/" + global.Env + ".yaml")
-	err := viper.ReadInConfig()
+
+	err := viper.ReadConfig(bytes.NewReader(conf))
 
 	if nil != err {
 		panic(err)
 	}
+
+	dir, err := os.UserHomeDir()
+
+	if nil != err {
+		panic(err.Error())
+	}
+
+	runtimePath := viper.Get("logger.file_path").(string)
+	afterAppend := append([]byte(dir), "/"...)
+	afterAppend = append(afterAppend, runtimePath...)
+	runtimePath = string(afterAppend)
+
+	_, fErr := os.Stat(runtimePath)
+
+	if nil != fErr {
+		mErr := os.Mkdir(runtimePath, 0755)
+
+		if nil != mErr {
+			panic(mErr.Error())
+		}
+	}
+
+	global.LoggerFilePath = runtimePath
 
 	global.RedisHost = viper.Get("redis.host").(string)
 	global.RedisPassword = viper.Get("redis.password").(string)
@@ -27,7 +54,7 @@ func InitConfig() {
 	global.AppHttpPort = viper.Get("app.http_port").(int)
 	global.JwtSecret = viper.Get("jwt.secret").(string)
 	global.JwtExpire = viper.Get("jwt.expire").(int)
-	global.LoggerFilePath = viper.Get("logger.file_path").(string)
+
 	global.KafkaHost = viper.Get("kafka.host").(string)
 	global.KafkaTopic = viper.Get("kafka.topic").(string)
 	global.ElasticHost = viper.Get("elastic.host").(string)

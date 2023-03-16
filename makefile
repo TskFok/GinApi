@@ -15,10 +15,10 @@ linux:
 	go mod  tidy
 
 build-mac: mac
-	go build -o gin-run-mac main.go
+	go build -o gin-run-mac -ldflags "-w -s"  -trimpath ./cmd/api/main.go
 
 build-linux: linux
-	go build -o gin-run-linux main.go
+	go build -o gin-run-linux -ldflags "-w -s"  -trimpath cmd/api/main.go
 
 update:
 	go mody tidy
