@@ -20,6 +20,8 @@ func Init() {
 	// mysql
 	global.MysqlClient = database.InitMysql()
 
+	//debug环境下不需要开启elasticsearch和kafka,使用文件记录日志,
+	//正式环境需要开启elasticsearch和kafka服务,使用elasticsearch记录日志
 	if global.Env != "debug" {
 		// elasticsearch
 		global.ElasticsearchClient = elasticsearch.InitElasticsearch()

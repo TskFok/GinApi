@@ -32,5 +32,11 @@ run-release:
 server-kafka:
 	go run server/kafkaServer.go --env=release
 
+build-server-kafka-mac: mac
+	go build -o gin-kafka-run-mac -ldflags "-w -s"  -trimpath ./server/kafkaServer.go
+
+build-server-kafka-linux: linux
+	go build -o gin-kafka-run-linux -ldflags "-w -s"  -trimpath ./server/kafkaServer.go
+
 es-index:
 	go run elasticsearch/index.go --env=release
