@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"github.com/TskFok/GinApi/app/err"
 	"github.com/TskFok/GinApi/app/response"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 )
 
@@ -17,7 +17,7 @@ func GetId(ctx *gin.Context) int {
 	intId, intErr := strconv.Atoi(id)
 
 	if nil != intErr {
-		response.Error(ctx, err.RuntimeError, intErr.Error())
+		response.Error(ctx, http.StatusBadRequest, intErr.Error())
 
 		return 0
 	}

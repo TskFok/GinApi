@@ -6,6 +6,7 @@ import (
 	"github.com/TskFok/GinApi/app/response"
 	"github.com/TskFok/GinApi/controller"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func singleValidate(ctx *gin.Context) bool {
@@ -44,7 +45,7 @@ func exist(ctx *gin.Context, intId int) bool {
 	router, exists := routerModel.Get(routerModel)
 
 	if exists && router.Id != uint32(intId) {
-		response.Error(ctx, err.RuntimeError, err.RouteRepeatError)
+		response.Error(ctx, http.StatusBadRequest, err.RouteRepeatError)
 
 		return true
 	}

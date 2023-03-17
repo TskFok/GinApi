@@ -7,17 +7,18 @@ import (
 	"github.com/TskFok/GinApi/utils/kafka"
 	"github.com/TskFok/GinApi/utils/logger"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func Success(ctx *gin.Context, list interface{}) {
 	successInfo := make(map[string]interface{})
-	successInfo["code"] = err.Success
-	successInfo["msg"] = err.GetMsg(err.Success)
+	successInfo["code"] = http.StatusOK
+	successInfo["msg"] = err.GetMsg(http.StatusOK)
 	successInfo["data"] = list
 
 	infoLog(ctx, successInfo)
 
-	ctx.JSON(err.Success, successInfo)
+	ctx.JSON(http.StatusOK, successInfo)
 }
 
 func Error(ctx *gin.Context, code int, info any) {
@@ -29,7 +30,7 @@ func Error(ctx *gin.Context, code int, info any) {
 		errorInfo["code"] = info.(int)
 		errorInfo["msg"] = err.GetMsg(info.(int))
 	case string:
-		errorInfo["code"] = err.RuntimeError
+		errorInfo["code"] = http.StatusBadRequest
 		errorInfo["msg"] = info.(string)
 	}
 

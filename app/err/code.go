@@ -1,10 +1,6 @@
 package err
 
 const (
-	Success = 200
-	Error   = 500
-
-	RuntimeError          = 400
 	UnknownError          = 400000
 	PasswordValidateError = 400001
 	PasswordDiffError     = 400002
@@ -18,7 +14,6 @@ const (
 	RouteNotExistsError   = 400010
 	RouteRepeatError      = 400011
 
-	UndefinedError       = 404
 	ParamsUndefinedError = 404000
 	UserUndefinedError   = 404001
 	RouterUndefinedError = 404002

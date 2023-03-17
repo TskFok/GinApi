@@ -6,6 +6,7 @@ import (
 	"github.com/TskFok/GinApi/app/response"
 	"github.com/TskFok/GinApi/controller"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 )
 
@@ -32,7 +33,7 @@ func Get(ctx *gin.Context) {
 	id, exists := ctx.GetQuery("id")
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.ParamsUndefinedError)
+		response.Error(ctx, http.StatusNotFound, err.ParamsUndefinedError)
 
 		return
 	}
@@ -43,7 +44,7 @@ func Get(ctx *gin.Context) {
 	routerDetail, exists := router.Get(condition)
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.RouterUndefinedError)
+		response.Error(ctx, http.StatusNotFound, err.RouterUndefinedError)
 
 		return
 	}
@@ -64,7 +65,7 @@ func Create(ctx *gin.Context) {
 	_, exists := newRouter.Get(newRouter)
 
 	if exists {
-		response.Error(ctx, err.UndefinedError, err.RouteHasExistsError)
+		response.Error(ctx, http.StatusNotFound, err.RouteHasExistsError)
 
 		return
 	}
@@ -74,7 +75,7 @@ func Create(ctx *gin.Context) {
 	userId, exists := ctx.Get("user_id")
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+		response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 
 		return
 	}
@@ -83,7 +84,7 @@ func Create(ctx *gin.Context) {
 	userName, exists := ctx.Get("user_name")
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+		response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 
 		return
 	}
@@ -93,7 +94,7 @@ func Create(ctx *gin.Context) {
 	id, routerErr := newRouter.Create(newRouter)
 
 	if routerErr != nil {
-		response.Error(ctx, err.RuntimeError, err.RouteCreateError)
+		response.Error(ctx, http.StatusBadRequest, err.RouteCreateError)
 
 		return
 	}
@@ -118,7 +119,7 @@ func Update(ctx *gin.Context) {
 	router, exists := routerModel.Get(routerModel)
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.RouteNotExistsError)
+		response.Error(ctx, http.StatusNotFound, err.RouteNotExistsError)
 
 		return
 	}
@@ -130,7 +131,7 @@ func Update(ctx *gin.Context) {
 	isUpdate := routerModel.Update(router)
 
 	if !isUpdate {
-		response.Error(ctx, err.RuntimeError, err.RouteUpdateError)
+		response.Error(ctx, http.StatusBadRequest, err.RouteUpdateError)
 
 		return
 	}

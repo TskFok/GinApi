@@ -65,18 +65,18 @@ userApi.Use(middleware.Jwt())//userApi的路由组使用jwt的中间件
 ``````
 cobra
 
-新增命令
+新增命令:
 cobra-cli add test
 
-新增test命令的子命令
+新增test命令的子命令:
 cobra-cli add child
 修改child.go里的init中的rootCmd->testCmd
 
-额外字段
+额外字段:
 Args: cobra.ExactArgs(2)//新增两个额外字段
 go run bin/cli/main.go create rule 1 2
 
-设置flags
+设置flags:
 ruleCmd.Flags().StringVarP(&name, "name", "n", "", "rule name")//设置name的flag
 
 以下等效:
@@ -84,4 +84,7 @@ go run bin/cli/main.go create rule 1 2 --name=a
 go run bin/cli/main.go create rule 1 2 --name a
 go run bin/cli/main.go create rule 1 2 -n=a
 go run bin/cli/main.go create rule 1 2 -n a
+
+打包后使用:
+./xxx create rule 1 2 -n a
 ``````

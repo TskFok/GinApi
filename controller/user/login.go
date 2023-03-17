@@ -7,6 +7,7 @@ import (
 	"github.com/TskFok/GinApi/app/tool"
 	"github.com/TskFok/GinApi/utils/cache"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -19,7 +20,7 @@ func Info(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+	response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 }
 
 func Login(ctx *gin.Context) {
@@ -38,7 +39,7 @@ func Login(ctx *gin.Context) {
 	user, exists := userModel.Get(condition)
 
 	if !exists {
-		response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+		response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 
 		return
 	}
@@ -60,7 +61,7 @@ func Login(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(user.Id)
 		data["token"] = token
 		if nil != tokenErr {
-			response.Error(ctx, err.Error, err.TokenError)
+			response.Error(ctx, http.StatusInternalServerError, err.TokenError)
 
 			return
 		}
@@ -70,7 +71,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.RuntimeError, err.PasswordValidateError)
+	response.Error(ctx, http.StatusBadRequest, err.PasswordValidateError)
 }
 
 func Register(ctx *gin.Context) {
@@ -83,7 +84,7 @@ func Register(ctx *gin.Context) {
 	rePassword := ctx.PostForm("re_password")
 
 	if password != rePassword {
-		response.Error(ctx, err.RuntimeError, err.PasswordDiffError)
+		response.Error(ctx, http.StatusBadRequest, err.PasswordDiffError)
 
 		return
 	}
@@ -96,7 +97,7 @@ func Register(ctx *gin.Context) {
 	_, exists := userModel.Get(condition)
 
 	if exists {
-		response.Error(ctx, err.RuntimeError, err.UserNameExistsError)
+		response.Error(ctx, http.StatusBadRequest, err.UserNameExistsError)
 
 		return
 	}
@@ -119,7 +120,7 @@ func Register(ctx *gin.Context) {
 		token, tokenErr := tool.JwtToken(id)
 
 		if nil != tokenErr {
-			response.Error(ctx, err.Error, err.TokenError)
+			response.Error(ctx, http.StatusInternalServerError, err.TokenError)
 
 			return
 		}
@@ -131,5 +132,5 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	response.Error(ctx, err.RuntimeError, err.UserCreateError)
+	response.Error(ctx, http.StatusBadRequest, err.UserCreateError)
 }

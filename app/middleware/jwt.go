@@ -8,6 +8,7 @@ import (
 	"github.com/TskFok/GinApi/app/tool"
 	"github.com/TskFok/GinApi/utils/cache"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 	"strings"
 )
@@ -19,7 +20,7 @@ func Jwt() gin.HandlerFunc {
 		claims, tokenErr := tool.TokenInfo(token)
 
 		if nil != tokenErr {
-			response.Error(ctx, err.RuntimeError, tokenErr.Error())
+			response.Error(ctx, http.StatusBadRequest, tokenErr.Error())
 
 			ctx.Abort()
 			return
@@ -35,7 +36,7 @@ func Jwt() gin.HandlerFunc {
 			jsonErr := json.Unmarshal([]byte(cache.Get(key)), &user)
 
 			if nil != jsonErr {
-				response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+				response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 
 				ctx.Abort()
 				return
@@ -49,7 +50,7 @@ func Jwt() gin.HandlerFunc {
 			user, exists = userModel.Get(condition)
 
 			if !exists {
-				response.Error(ctx, err.UndefinedError, err.UserUndefinedError)
+				response.Error(ctx, http.StatusNotFound, err.UserUndefinedError)
 
 				ctx.Abort()
 				return
@@ -57,7 +58,7 @@ func Jwt() gin.HandlerFunc {
 			res, jsonErr := json.Marshal(user)
 
 			if nil != jsonErr {
-				response.Error(ctx, err.RuntimeError, err.RedisError)
+				response.Error(ctx, http.StatusBadRequest, err.RedisError)
 
 				ctx.Abort()
 				return
