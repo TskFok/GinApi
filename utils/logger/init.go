@@ -17,7 +17,7 @@ func InitLogger() *zap.SugaredLogger {
 
 	logPath := path.String()
 
-	file, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY, 0777)
+	file, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
 
 	if err != nil {
 		fmt.Println(err)
