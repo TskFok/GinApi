@@ -30,13 +30,13 @@ run-release:
 	go run bin/api/main.go --env=release
 
 server-kafka:
-	go run server/kafkaServer.go --env=release
+	go run bin/server/kafkaServer.go --env=release
 
 build-server-kafka-mac: mac
-	go build -o gin-kafka-run-mac -ldflags "-w -s"  -trimpath ./server/kafkaServer.go
+	go build -o gin-kafka-run-mac -ldflags "-w -s"  -trimpath ./bin/server/kafkaServer.go
 
 build-server-kafka-linux: linux
-	go build -o gin-kafka-run-linux -ldflags "-w -s"  -trimpath ./server/kafkaServer.go
+	go build -o gin-kafka-run-linux -ldflags "-w -s"  -trimpath ./bin/server/kafkaServer.go
 
 es-index:
 	go run bin/cli/main.go es:index --env=debug
