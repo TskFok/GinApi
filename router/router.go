@@ -16,6 +16,7 @@ func InitRouter() {
 	Handle = gin.New()
 	Handle.Use(gin.Recovery())
 	Handle.Use(gin.Logger())
+	Handle.Use(middleware.Cros())
 
 	api := Handle.Group("/api")
 	{
