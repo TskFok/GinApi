@@ -16,7 +16,7 @@ func InitProcess() {
 		syscall.Umask(0)
 		return
 	}
-	fmt.Println("go daemon!!!")
+	fmt.Println("守护进程")
 	fp, err := os.OpenFile("api.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		panic(err)
