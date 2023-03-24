@@ -88,3 +88,14 @@ go run bin/cli/main.go create rule 1 2 -n a
 打包后使用:
 ./xxx create rule 1 2 -n a
 ``````
+
+``````
+守护进程:
+process.InitProcess()
+
+关闭守护进程:
+kill -2 pid
+
+进程日志:
+api.log
+``````
