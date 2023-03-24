@@ -23,13 +23,13 @@ build-linux: linux
 update:
 	go mody tidy
 
-run-debug:
+run-debug: mac
 	go run bin/api/main.go --env=debug
 
-run-release:
+run-release: mac
 	go run bin/api/main.go --env=release
 
-server-kafka:
+server-kafka: mac
 	go run bin/server/kafkaServer.go --env=release
 
 build-server-kafka-mac: mac
@@ -38,7 +38,7 @@ build-server-kafka-mac: mac
 build-server-kafka-linux: linux
 	go build -o gin-kafka-run-linux -ldflags "-w -s"  -trimpath ./bin/server/kafkaServer.go
 
-es-index:
+es-index: mac
 	go run bin/cli/main.go es:index --env=debug
 
 build-cli-mac: mac
